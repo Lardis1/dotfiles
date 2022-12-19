@@ -1,0 +1,5 @@
+#!/usr/bin/zsh
+
+alias echo='echo -e'
+alias yay='yay --answerdiff N --answerclean A'
+

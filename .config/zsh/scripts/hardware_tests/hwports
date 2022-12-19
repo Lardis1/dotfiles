@@ -1,0 +1,4 @@
+
+
+# Watches dev ttyUSB0 -> ESP8266 PORT
+watch ls /dev/ttyUSB0

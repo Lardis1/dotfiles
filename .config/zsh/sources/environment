@@ -1,0 +1,7 @@
+#!/usr/bin/zsh
+
+export XDG_CONFIG_HOME=$HOME/.config
+export ZDOTDIR=$HOME/.config/zsh
+export KITTY_CONFIG_DIRECTORY=$HOME/.config/kitty
+export PATH=$HOME/bin:$PATH
+
