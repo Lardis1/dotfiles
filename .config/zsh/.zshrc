@@ -94,12 +94,14 @@ fi
 configure_prompt() {
     prompt_symbol=㉿
     # Skull emoji for root terminal
-    #[ "$EUID" -eq 0 ] && prompt_symbol=💀
+    [ "$EUID" -eq 0 ] && prompt_symbol=💀
     case "$PROMPT_ALTERNATIVE" in
         twoline)
-            PROMPT=$'%F{%(#.blue.green)}┌──${debian_chroot:+($debian_chroot)─}${VIRTUAL_ENV:+($(basename $VIRTUAL_ENV))─}(%B%F{%(#.red.blue)}%n'$prompt_symbol$'%m%b%F{%(#.blue.green)})-[%B%F{reset}%(6~.%-1~/…/%4~.%5~)%b%F{%(#.blue.green)}]\n└─%B%(#.%F{red}#.%F{blue}$)%b%F{reset} '
+            # PROMPT=$'%F{%(#.blue.green)}┌──${debian_chroot:+($debian_chroot)─}${VIRTUAL_ENV:+($(basename $VIRTUAL_ENV))─}(%B%F{%(#.red.blue)}%n'$prompt_symbol$'%m%b%F{%(#.blue.green)})-[%B%F{reset}%(6~.%-1~/…/%4~.%5~)%b%F{%(#.blue.green)}]\n└─$(git_branch_name)%B%(#.%F{red}#.%F{blue})$%b%F{reset} '
             # Right-side prompt with exit codes and background processes
-            RPROMPT=$'%(?.. %? %F{red}%B⨯%b%F{reset})%(1j. %j %F{yellow}%B⚙%b%F{reset}.)'
+            # RPROMPT=$'%(?.. %? %F{red}%B⨯%b%F{reset})%(1j. %j %F{yellow}%B⚙%b%F{reset}.)'
+            # PROMPT=$git_branch_name$' '$yB$PRIM_1$'%n'$PRIM_2$'%m'$PRIM_1$' %(6~.%-1~/…/%4~.%5~)\n%b%F{reset}❯ ' 
+            # RPROMPT=$(git_branch_name)
             ;;
         oneline)
             PROMPT=$'${debian_chroot:+($debian_chroot)}${VIRTUAL_ENV:+($(basename $VIRTUAL_ENV))}%B%F{%(#.red.blue)}%n@%m%b%F{reset}:%B%F{%(#.blue.green)}%~%b%F{reset}%(#.#.$) '
@@ -112,6 +114,7 @@ configure_prompt() {
     esac
     unset prompt_symbol
 }
+
 
 # The following block is surrounded by two delimiters.
 # These delimiters must not be modified. Thanks.
@@ -187,7 +190,7 @@ toggle_oneline_prompt(){
     zle reset-prompt
 }
 zle -N toggle_oneline_prompt
-bindkey ^P toggle_oneline_prompt
+bindkey '^P' toggle_oneline_prompt
 
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
@@ -267,17 +270,11 @@ if [ -f /root/zsh/sources/environment ]; then
 	source /home/cos/sources/environment
 fi
 
-# Load version control information
-# autoload -Uz vcs_info
-# precmd() { vcs_info }
-
-# Format the vcs_info_msg_0_ variable
-# zstyle ':vcs_info:git:*' formats '(%b)'
-
 # Set up the prompt (with git branch name)
-# setopt PROMPT_SUBST
-# PROMPT='%n in ${PWD/#$HOME/~} ${vcs_info_msg_0_} > '
+setopt PROMPT_SUBST
 
+PROMPT='$(~/.config/zsh/prompt.sh)'
+RPROMPT=$'%(?.. %? %F{red}%B⨯%b%F{reset})%(1j. %j %F{yellow}%B⚙%b%F{reset}.)'
 # For listz project
 export PATH=/home/cos/.local/bin:/home/cos/dev/Projects/Listz/bin:/home/cos/dev/Projects/Listz/devbin:$PATH
 alias LPDgo='cd $(LPD)/src'
