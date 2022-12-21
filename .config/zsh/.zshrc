@@ -280,3 +280,5 @@ export PATH=/home/cos/.local/bin:/home/cos/dev/Projects/Listz/bin:/home/cos/dev/
 alias LPDgo='cd $(LPD)/src'
 
 export PATH=/home/cos/bin:$PATH
+
+

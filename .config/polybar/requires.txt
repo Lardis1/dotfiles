@@ -1,0 +1,18 @@
+# Launchers
+rofi
+
+firefox
+vscode
+spotify
+thunar
+kitty
+
+# volume
+pulseaudio
+pavucontrol
+polybar-spotify-module     [AUR for spotify]
+pacmd
+
+# workspaces
+xdotool
+wmctrl
