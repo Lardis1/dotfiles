@@ -262,12 +262,12 @@ fi
 
 alias ssh='kitty +kitten ssh'
 
-if [ -f /root/zsh/sources/aliases ]; then
-	source /home/cos/zsh/sources/aliases
+if [ -f /cos/zsh/sources/aliases ]; then
+	source /cos/zsh/sources/aliases
 fi
 
-if [ -f /root/zsh/sources/environment ]; then
-	source /home/cos/sources/environment
+if [ -f /cos/zsh/sources/environment ]; then
+	source /cos/sources/environment
 fi
 
 # Set up the prompt (with git branch name)
@@ -276,9 +276,10 @@ setopt PROMPT_SUBST
 PROMPT='$(~/.config/zsh/prompt.sh)'
 RPROMPT=$'%(?.. %? %F{red}%B⨯%b%F{reset})%(1j. %j %F{yellow}%B⚙%b%F{reset}.)'
 # For listz project
-export PATH=/home/cos/.local/bin:/home/cos/dev/Projects/Listz/bin:/home/cos/dev/Projects/Listz/devbin:$PATH
+export PATH=/cos/bin:/cos/.local/bin:$PATH
 alias LPDgo='cd $(LPD)/src'
 
-export PATH=/home/cos/bin:$PATH
-
+# ssh git configs
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/Lardis1_git
 
