@@ -280,6 +280,5 @@ export PATH=/cos/bin:/cos/.local/bin:$PATH
 alias LPDgo='cd $(LPD)/src'
 
 # ssh git configs
-eval "$(ssh-agent -s)"
-ssh-add ~/.ssh/Lardis1_git
-
+eval "$(ssh-agent -s)" >/dev/null 2>&1
+ssh-add ~/.ssh/Lardis1_git >/dev/null 2>&1
