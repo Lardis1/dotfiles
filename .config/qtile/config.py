@@ -104,7 +104,7 @@ for i in groups:
             Key(
                 [mod, "shift"],
                 i.name,
-                lazy.window.togroup(i.name, switch_group=True),
+                lazy.window.togroup(i.name, switch_group=False),
                 desc="Switch to & move focused window to group {}".format(i.name),
             ),
             # Or, use below if you prefer not to switch to that group.
@@ -113,6 +113,13 @@ for i in groups:
             #     desc="move focused window to group {}".format(i.name)),
         ]
     )
+    
+# Drag floating layouts.
+mouse = [
+    Drag([mod], "Button1", lazy.window.set_position_floating(), start=lazy.window.get_position()),
+    Drag([mod], "Button3", lazy.window.set_size_floating(), start=lazy.window.get_size()),
+    Click([mod], "Button2", lazy.window.bring_to_front()),
+]
     
 # Layouts
 layouts = [
@@ -143,20 +150,6 @@ layouts = [
     # layout.Zoomy(),
 ]
 
-# Drag floating layouts.
-mouse = [
-    Drag([mod], "Button1", lazy.window.set_position_floating(), start=lazy.window.get_position()),
-    Drag([mod], "Button3", lazy.window.set_size_floating(), start=lazy.window.get_size()),
-    Click([mod], "Button2", lazy.window.bring_to_front()),
-]
-
-screens = []
-
-dgroups_key_binder = None
-dgroups_app_rules = []  # type: list
-follow_mouse_focus = False
-bring_front_click = False
-cursor_warp = False
 floating_layout = layout.Floating(
     float_rules=[
         # Run the utility of `xprop` to see the wm class and name of an X client.
@@ -173,31 +166,30 @@ floating_layout = layout.Floating(
     border_normal = "#555555",
     border_width = 3,
 )
+
+screens: list[Screen] = []
+
+dgroups_key_binder = None
+dgroups_app_rules = []  # type: list
+follow_mouse_focus = False
+bring_front_click = False
+cursor_warp = False
 auto_fullscreen = False
 focus_on_window_activation = "smart"
 reconfigure_screens = True
 
-# If things like steam games want to auto-minimize themselves when losing
-# focus, should we respect this or not?
 auto_minimize = True
-
-# When using the Wayland backend, this can be used to configure input devices.
 wl_input_rules = None
-
-# XXX: Gasp! We're lying here. In fact, nobody really uses or cares about this
-# string besides java UI toolkits; you can see several discussions on the
-# mailing lists, GitHub issues, and other WM documentation that suggest setting
-# this string if your java app doesn't work correctly. We may as well just lie
-# and say that we're a working one by default.
-#
-# We choose LG3D to maximize irony: it is a 3D non-reparenting WM written in
-# java that happens to be on java's whitelist.
 wmname = "LG3D"
 
 
 import os
 import subprocess
 from libqtile import hook
+
+def update_polybar_workspaces():
+    for i in range(1, 10):
+        subprocess.Popen(["polybar-msg", "hook", "w{}".format(i), "1"])
 
 # startup_once to not include restarts 
 @hook.subscribe.startup_once
@@ -214,5 +206,9 @@ def floating_dialogs(window):
     transient = window.window.get_wm_transient_for()
     if dialog or transient:
         window.floating = True
-
-
+        
+    update_polybar_workspaces()
+        
+@hook.subscribe.setgroup
+def polybar_ipc():
+    update_polybar_workspaces()
