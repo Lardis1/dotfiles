@@ -182,6 +182,7 @@ auto_minimize = True
 wl_input_rules = None
 wmname = "LG3D"
 
+## HOOKS ##
 
 import os
 import subprocess
@@ -196,8 +197,7 @@ def update_polybar_workspaces():
 def autostart():
     home = os.path.expanduser('~/.config/qtile/autostart.sh')
     subprocess.Popen([home])
-    
-    
+
 # Event triggered on new window events
 # makes all dialog boxes floating
 @hook.subscribe.client_new
@@ -206,9 +206,5 @@ def floating_dialogs(window):
     transient = window.window.get_wm_transient_for()
     if dialog or transient:
         window.floating = True
-        
-    update_polybar_workspaces()
-        
-@hook.subscribe.setgroup
-def polybar_ipc():
+    
     update_polybar_workspaces()
